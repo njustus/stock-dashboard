@@ -1,0 +1,5 @@
+stocks:
+  - isin: '123456'
+    quantity: 5
+  - isin: 'FR00542'
+    quantity: 155

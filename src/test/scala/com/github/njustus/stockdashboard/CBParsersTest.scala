@@ -5,22 +5,14 @@ import com.github.njustus.stockdashboard.parser.CBParsers
 import org.scalatest.*
 import org.scalatest.flatspec.AnyFlatSpec
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.Decoder
+import scala.io.Codec
 import org.scalatest.matchers.should.Matchers
 
 import java.time.*
 import scala.io.Codec
 
-class CBParsersTest
-  extends AnyFlatSpec
-    with Matchers
-    with LazyLogging:
-
-  implicit val codec: Codec = Codec.UTF8
-
-  extension [A](result: Decoder.Result[A])
-    def get: A = result.getOrElse(throw new IllegalStateException("no parsing error expected"))
-
+class CBParsersTest extends BaseTestSuite:
+  
   "The CBParsers" should "parse price response from /web-financialinfo-service/api/marketdata/etfs?id=[ISIN]&field=PriceV2" in {
     val sampleResponse = scala.io.Source.fromResource("price-response.json").mkString
     logger.info("parsing this response: {}", sampleResponse)
