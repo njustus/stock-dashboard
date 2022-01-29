@@ -5,6 +5,7 @@ import cats.{Applicative, Monad}
 import cats.effect.{Async, Resource}
 import cats.syntax.all.*
 import com.comcast.ip4s.*
+import com.github.njustus.stockdashboard.parser.CBParsers
 import fs2.Stream
 import org.http4s.ember.client.EmberClientBuilder
 import org.http4s.ember.server.EmberServerBuilder
@@ -25,28 +26,10 @@ object StockdashboardServer {
 
   val isin = "FR0010315770"
 
-  implicit val offsetDateTimDecoder: Decoder[OffsetDateTime] = Decoder.decodeString.map { str =>
-    val stripped = str.substring(0, str.length - 2)
-    val ancestor = DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(stripped)
-    OffsetDateTime.from(ancestor)
-  }
-
-  case class ExchangeData(isin: String,
-                         price: BigDecimal,
-                         time: OffsetDateTime)
 
   def getSampleFile =
     val src = scala.io.Source.fromFile(new File("./example.json"))
     src.getLines().mkString
-
-  def extractExchangeData(json: Json): Decoder.Result[ExchangeData] =
-    println(s"decoding json: $json")
-    val cursor = json.hcursor.downN(0)
-    val id = cursor.downField("Info").get[String]("ID")
-    val price = cursor.downField("PriceV2").get[BigDecimal]("PRICE")
-    val time = cursor.downField("PriceV2").get[OffsetDateTime]("DATETIME_PRICE")
-
-    Applicative[Decoder.Result].map3(id, price, time)(ExchangeData.apply)
 
   def jsonDecoder[F[_]:Async]: EntityDecoder[F, Json] = jsonOf
 
@@ -64,7 +47,7 @@ object StockdashboardServer {
 //        .map(str => parser.parse(str).flatMap(extractExchangeData))
 //        .map(x => println("data fetched: "+x))
       data = fetchStockData(client)
-        .map(extractExchangeData)
+        .map(CBParsers.extractExchangeData)
         .map(x => println("data fetched: "+x))
 
       // Combine Service Routes into an HttpApp.

@@ -1,0 +1,28 @@
+[
+    {
+        "Info": {
+            "ID": "FR0010315770"
+        },
+        "PriceV2": {
+            "ADDENDUM": null,
+            "CONSORS_EXCHANGE_CODE": "@_KAG",
+            "CONSORS_EXCHANGE_NAME": "Fondsgesellschaft",
+            "DATETIME_PRICE": "2022-01-28T09:00:00+0000",
+            "FIRST": 259.38,
+            "HIGH": 259.38,
+            "ID_NOTATION": "20485642",
+            "ID_UNIT_PRICE": "pieces",
+            "ISO_CURRENCY": "EUR",
+            "IS_REALTIME": true,
+            "LOW": 259.38,
+            "NUMBER_PRICES": 3,
+            "PERFORMANCE": -2.882,
+            "PERFORMANCE_PCT": -1.098901,
+            "PREVIOUS_LAST": 262.262,
+            "PRICE": 259.38,
+            "TOTAL_MONEY": null,
+            "TOTAL_VOLUME": null,
+            "VOLUME": null
+        }
+    }
+]
