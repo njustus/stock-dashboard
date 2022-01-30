@@ -1,0 +1,3 @@
+baseUrl: https://www.consorsbank.de
+stockInfoPath: web-financialinfo-service/api/marketdata/etfs?id={isin}&field=BasicV1
+exchangeDataPath: web-financialinfo-service/api/marketdata/etfs?id={isin}&field=PriceV2

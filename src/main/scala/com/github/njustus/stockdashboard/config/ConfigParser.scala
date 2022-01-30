@@ -1,17 +1,20 @@
 package com.github.njustus.stockdashboard.config
 
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 import scala.io.Source
 import io.circe.*
 import io.circe.generic.semiauto._
 import io.circe.yaml.parser
+import com.typesafe.scalalogging.LazyLogging
 
 trait ConfigDecoders:
   implicit val appConfigDecoder: Decoder[AppConfig] = deriveDecoder[AppConfig]
   implicit val watchedStockDecoder: Decoder[WatchedStock] = deriveDecoder[WatchedStock]
   implicit val watchedStocksDecoder: Decoder[WatchedStocks] = deriveDecoder[WatchedStocks]
 
-object ConfigParser extends ConfigDecoders:
+object ConfigParser extends ConfigDecoders with LazyLogging:
+  val DEFAULT_USER_PATH: Path = Paths.get(System.getProperty("user.home")).resolve(".stock-dashboard.yaml")
+  
   def readYaml(path: Path): Decoder.Result[Json] =
     parser.parse(Source.fromFile(path.toFile).reader()) match
       case Right(js) => Right(js)
@@ -22,3 +25,7 @@ object ConfigParser extends ConfigDecoders:
 
   def readAppConfig(path: Path): Decoder.Result[AppConfig] =
     readYaml(path).flatMap(json => json.as[AppConfig])
+  
+  def readUserConfigFromDefaultPath: Decoder.Result[WatchedStocks] =
+    logger.info("reading user-config from {}", DEFAULT_USER_PATH)
+    readUserConfig(DEFAULT_USER_PATH)
