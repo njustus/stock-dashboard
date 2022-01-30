@@ -16,12 +16,15 @@
 .\#*
 
 *.DS_Store
-
+.attach*
+.vscode
 bin
 data
 target
 data
 project/target
+project/project
+project/metals.sbt
 README.html
 .gradle
 build
