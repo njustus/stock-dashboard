@@ -2,15 +2,16 @@ package com.github.njustus.stockdashboard.config
 
 import java.nio.file.Path
 import scala.io.Source
+import io.circe.*
+import io.circe.generic.semiauto._
+import io.circe.yaml.parser
 
-object ConfigParser {
-  import io.circe.*
-  import io.circe.generic.semiauto._
-  import io.circe.yaml.parser
-
+trait ConfigDecoders:
+  implicit val appConfigDecoder: Decoder[AppConfig] = deriveDecoder[AppConfig]
   implicit val watchedStockDecoder: Decoder[WatchedStock] = deriveDecoder[WatchedStock]
   implicit val watchedStocksDecoder: Decoder[WatchedStocks] = deriveDecoder[WatchedStocks]
 
+object ConfigParser extends ConfigDecoders:
   def readYaml(path: Path): Decoder.Result[Json] =
     parser.parse(Source.fromFile(path.toFile).reader()) match
       case Right(js) => Right(js)
@@ -18,4 +19,6 @@ object ConfigParser {
 
   def readUserConfig(path: Path): Decoder.Result[WatchedStocks] =
     readYaml(path).flatMap(json => json.as[WatchedStocks])
-}
+
+  def readAppConfig(path: Path): Decoder.Result[AppConfig] =
+    readYaml(path).flatMap(json => json.as[AppConfig])
