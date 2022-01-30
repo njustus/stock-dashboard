@@ -1,0 +1,36 @@
+[
+  {
+    "BasicV1": {
+      "DATE_TOTAL_EXPENSE_RATIO": "2020-10-29T23:00:00+0000",
+      "ID": {
+        "CONSORS_ID": "_15214293",
+        "ID_NOTATION": "15214293",
+        "ID_OSI": "14352926",
+        "ISIN": "FR0010315770",
+        "SYMBOL": "LYYA",
+        "WKN": "LYX0AG"
+      },
+      "ID_SECURITY_TYPE": "7",
+      "ID_SUB_SECURITY_TYPE": "71",
+      "ID_TYPE_REPLICATION": "6",
+      "ISO_COUNTRY": "FR",
+      "IS_EXCHANGE_TRADED": true,
+      "IS_ISSUED_BY_BNPPARIBAS": false,
+      "IS_SAVINGSPLAN_ALLOWED": true,
+      "IS_SOLD_BY_CONSORS": true,
+      "NAME_INVESTMENT_FOCUS": "Aktien International",
+      "NAME_ISSUER": "Lyxor International Asset Management S.A.S.",
+      "NAME_SECURITY": "LYXOR MSCI WORLD UCITS ETF - EUR DIS",
+      "NAME_SECURITY_SHORT": "LYXOR MSCI WORLD UCITS ETF - EUR DIS",
+      "NAME_SECURITY_TYPE": "ETF",
+      "NAME_SUB_SECURITY_TYPE": "Aktienfonds",
+      "NAME_TYPE_REPLICATION": "Synthetic Replication",
+      "REGISTERED_FOR_DE": true,
+      "TOOL_SECURITY_TYPE": "ETF",
+      "TOTAL_EXPENSE_RATIO": 0.3
+    },
+    "Info": {
+      "ID": "FR0010315770"
+    }
+  }
+]

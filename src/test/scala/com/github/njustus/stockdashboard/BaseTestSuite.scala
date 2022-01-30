@@ -20,6 +20,8 @@ trait BaseTestSuite
       case Left(ex) => throw ex
       case Right(v) => v
 
+  def resourceToString(resource:String): String =
+    scala.io.Source.fromResource(resource).mkString    
 
   def resourcePath(resource:String):Path =
     logger.info(s"searching for resource $resource")

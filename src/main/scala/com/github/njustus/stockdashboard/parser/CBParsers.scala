@@ -1,7 +1,7 @@
 package com.github.njustus.stockdashboard.parser
 
 import cats.Applicative
-import com.github.njustus.stockdashboard.dtos.ExchangeData
+import com.github.njustus.stockdashboard.dtos.{ExchangeData, StockInfo}
 import io.circe.{Decoder, Json, ParsingFailure, parser}
 
 import java.time.OffsetDateTime
@@ -21,10 +21,25 @@ trait ParsingSupport:
     case Right(js) => js
 
 object CBParsers extends ParsingSupport:
+  import cats.implicits.*
+
   def extractExchangeData(json: Json): Decoder.Result[ExchangeData] =
     val cursor = json.hcursor.downN(0)
     val id = cursor.downField("Info").get[String]("ID")
     val price = cursor.downField("PriceV2").get[BigDecimal]("PRICE")
     val time = cursor.downField("PriceV2").get[OffsetDateTime]("DATETIME_PRICE")
 
-    Applicative[Decoder.Result].map3(id, price, time)(ExchangeData.apply)
+    (id, price, time).mapN(ExchangeData.apply)
+
+  def extractStockInfo(json: Json): Decoder.Result[StockInfo] =
+    val cursor = json.hcursor.downN(0)
+    val basicNode = cursor.downField("BasicV1")
+
+    val name = basicNode.get[String]("NAME_SECURITY")
+    val isin = basicNode.downField("ID").get[String]("ISIN")
+    val wkn = basicNode.downField("ID").get[String]("WKN")
+    val ter = basicNode.get[BigDecimal]("TOTAL_EXPENSE_RATIO")
+    val invFocus = basicNode.get[Option[String]]("NAME_INVESTMENT_FOCUS")
+    val invType = basicNode.get[Option[String]]("NAME_SUB_SECURITY_TYPE")
+
+    (name, isin, wkn, ter, invFocus, invType).mapN(StockInfo.apply)
