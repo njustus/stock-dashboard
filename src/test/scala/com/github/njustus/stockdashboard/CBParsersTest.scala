@@ -37,7 +37,7 @@ class CBParsersTest extends BaseTestSuite:
       "LYXOR MSCI WORLD UCITS ETF - EUR DIS",
       "FR0010315770",
       "LYX0AG",
-      0.3,
+      BigDecimal(0.3).some,
       "Aktien International".some,
       "Aktienfonds".some
     )

@@ -20,6 +20,17 @@ class ConfigParserTest extends BaseTestSuite:
     json shouldNot be(null)
   }
 
+  it should "parse BigDecimals" in {
+    val jsonStr = """{
+      "isin" : "test",
+      "quantity" : 23.374890,
+      "alias" : "MSCI All Country World"
+    }"""
+
+    val json = io.circe.parser.parse(jsonStr).getOrElse(throw new RuntimeException)
+    json.as[WatchedStock].get
+  }
+
   it should "parse WatchedStocks" in {
     val stocks = ConfigParser.readUserConfig(filePath).get
     val expected = WatchedStocks(List(
@@ -29,10 +40,10 @@ class ConfigParserTest extends BaseTestSuite:
 
     stocks shouldBe(expected)
   }
-  
+
   it should "parse AppConfig's" in {
     val appConfig = ConfigParser.readAppConfig(appConfigPath).get
-    
+
     appConfig shouldBe (AppConfig(
       "http://google.de",
       "/stockInfo?field=Basic",

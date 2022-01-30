@@ -23,8 +23,8 @@ object Main extends IOApp {
         stockClient = new StockClient[IO](httpClient)(config)
         processor = new ConfigProcessor(stockClient)(config)
         latestStockData <- processor.readLatestStockData
-        prettied = latestStockData.mkString("\n")
-        _ <- IO.println("latest stock data:\n"+prettied)
+        prettied = StockRecordPrinter.printRecords(latestStockData)
+        _ <- IO.println(prettied)
       yield ExitCode.Success
     }
 }

@@ -38,7 +38,7 @@ object CBParsers extends ParsingSupport:
     val name = basicNode.get[String]("NAME_SECURITY")
     val isin = basicNode.downField("ID").get[String]("ISIN")
     val wkn = basicNode.downField("ID").get[String]("WKN")
-    val ter = basicNode.get[BigDecimal]("TOTAL_EXPENSE_RATIO")
+    val ter = basicNode.get[Option[BigDecimal]]("TOTAL_EXPENSE_RATIO")
     val invFocus = basicNode.get[Option[String]]("NAME_INVESTMENT_FOCUS")
     val invType = basicNode.get[Option[String]]("NAME_SUB_SECURITY_TYPE")
 
