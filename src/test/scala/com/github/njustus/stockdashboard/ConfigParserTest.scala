@@ -22,8 +22,8 @@ class ConfigParserTest extends BaseTestSuite:
   it should "parse WatchedStocks" in {
     val stocks = ConfigParser.readUserConfig(filePath).get
     val expected = WatchedStocks(List(
-      WatchedStock("123456", 5),
-      WatchedStock("FR00542", 155)
+      WatchedStock("123456", 5, None),
+      WatchedStock("FR00542", 155, Some("MSCI World"))
     ))
 
     println( io.circe.yaml.printer.print(io.circe.Json.fromJsonObject(encoder.encodeObject(expected))) )

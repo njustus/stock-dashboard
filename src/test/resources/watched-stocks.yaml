@@ -3,3 +3,4 @@ stocks:
     quantity: 5
   - isin: 'FR00542'
     quantity: 155
+    alias: 'MSCI World'
