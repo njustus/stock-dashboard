@@ -28,16 +28,19 @@ object Main extends IOApp {
     EmberClientBuilder.default[IO].build.use { httpClient =>
       for
         config <- appConfig
-        userConfig <- IO.fromEither(ConfigParser.readUserConfigFromDefaultPath)
-        html = generateHtml(userConfig)
-        _ <- IO.delay {
-          val writer = Files.newBufferedWriter(Paths.get("index.html"), StandardCharsets.UTF_8)
-          writer.write(html)
-          writer.close()
-        }
-        _ <- IO.println("index written")
-//        stockClient = new StockClient[IO](httpClient)(config)
-//        processor = new ConfigProcessor(stockClient)(config)
+        stockClient = new StockClient[IO](httpClient)(config)
+        processor = new ConfigProcessor(stockClient)(config)
+        routes = new StockRoutes(builder, processor)
+        serverResource = StockdashboardServer.buildServer(routes)
+        _ <- serverResource.use(_ => IO.never)
+//        userConfig <- IO.fromEither(ConfigParser.readUserConfigFromDefaultPath)
+//        html = generateHtml(userConfig)
+//        _ <- IO.delay {
+//          val writer = Files.newBufferedWriter(Paths.get("index.html"), StandardCharsets.UTF_8)
+//          writer.write(html)
+//          writer.close()
+//        }
+//        _ <- IO.println("index written")
 //        latestStockData <- processor.readLatestStockData
 //        prettied = StockRecordPrinter.printRecords(latestStockData)
 //        _ <- IO.println(prettied)
