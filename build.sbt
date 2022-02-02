@@ -16,6 +16,7 @@ lazy val root = (project in file("."))
       "io.circe"        %% "circe-generic"       % CirceVersion,
       "io.circe"        %% "circe-parser"       % CirceVersion,
       "io.circe" %% "circe-yaml" % CirceVersion,
+      "de.neuland-bfi" % "pug4j" % "2.0.5",
       "ch.qos.logback"  %  "logback-classic"     % LogbackVersion,
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
       "org.scalatest" %% "scalatest" % "3.2.9" % Test
