@@ -1,8 +1,7 @@
-doctype html
-html(lang='en')
- head
-   title Hello, World!
- body
-   h1 Hello, World!
-   div.remark
-     p ISIN: #{isin} Anzahl: #{quantity}
+extends layout.pug
+
+block content
+  .col-6
+    h1 Hello, World!
+    div.remark
+      p ISIN: #{stock.isin()} Anzahl: #{stock.quantity()}
