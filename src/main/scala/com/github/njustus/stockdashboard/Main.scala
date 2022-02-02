@@ -12,7 +12,7 @@ import org.http4s.ember.client.EmberClientBuilder
 import java.nio.charset.StandardCharsets
 
 object Main extends IOApp {
-  val builder = new TemplateBuilder
+
 
   def appConfig: IO[AppConfig] =
     for
@@ -20,11 +20,8 @@ object Main extends IOApp {
       result <- IO.fromEither(ConfigParser.readAppConfig(configPath))
     yield result
 
-  def generateHtml(userConfig: WatchedStocks): String =
-    val first = userConfig.stocks.head
-    builder.render("index", Map("stock" -> first))
-
   def run(args: List[String]): IO[ExitCode] =
+    val builder = new TemplateBuilder
     EmberClientBuilder.default[IO].build.use { httpClient =>
       for
         config <- appConfig
@@ -33,17 +30,6 @@ object Main extends IOApp {
         routes = new StockRoutes(builder, processor)
         serverResource = StockdashboardServer.buildServer(routes)
         _ <- serverResource.use(_ => IO.never)
-//        userConfig <- IO.fromEither(ConfigParser.readUserConfigFromDefaultPath)
-//        html = generateHtml(userConfig)
-//        _ <- IO.delay {
-//          val writer = Files.newBufferedWriter(Paths.get("index.html"), StandardCharsets.UTF_8)
-//          writer.write(html)
-//          writer.close()
-//        }
-//        _ <- IO.println("index written")
-//        latestStockData <- processor.readLatestStockData
-//        prettied = StockRecordPrinter.printRecords(latestStockData)
-//        _ <- IO.println(prettied)
       yield ExitCode.Success
     }
 }
