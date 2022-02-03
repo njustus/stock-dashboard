@@ -1,9 +1,11 @@
 package com.github.njustus.stockdashboard
 
+import com.github.njustus.stockdashboard.config.AppConfig
 import com.typesafe.scalalogging.LazyLogging
 import de.neuland.pug4j.{Pug4J, PugConfiguration}
-import de.neuland.pug4j.template.TemplateLoader
+import de.neuland.pug4j.template.{FileTemplateLoader, TemplateLoader}
 
+import java.nio.file.Paths
 import scala.jdk.CollectionConverters.*
 
 private class ResourceTemplateLoader(resourceBasePath: String) extends TemplateLoader with LazyLogging {
@@ -25,8 +27,14 @@ private class ResourceTemplateLoader(resourceBasePath: String) extends TemplateL
 }
 
 
-class TemplateBuilder {
-  private val loader = ResourceTemplateLoader("views")
+class TemplateBuilder(appConfig:AppConfig) {
+  private val loader = {
+    if(appConfig.isDevelopment)
+      val basePath = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "views")
+      FileTemplateLoader(basePath.toString)
+    else
+      ResourceTemplateLoader("views")
+  }
   private val config = PugConfiguration()
   config.setCaching(false)
   config.setTemplateLoader(loader)

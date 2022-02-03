@@ -32,7 +32,7 @@ class StockRoutes(templateBuilder: TemplateBuilder,
       for
         stocks <- stockDataSample
         stock = stocks.head
-        html <- IO.delay(templateBuilder.render("index", Map("stock" -> stock)))
+        html <- IO.delay(templateBuilder.render("index", Map("stock" -> stock))).onError(er => IO(er.printStackTrace()))
         resp <- Ok(html, headers.`Content-Type`(MediaType.unsafeParse("text/html")))
       yield resp
   }

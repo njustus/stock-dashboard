@@ -1,7 +1,14 @@
 extends layout.pug
 
+mixin stockEntry(stock)
+  ul(class='unstyled-list')
+    li ISIN: #{stock.isin()}
+    li Anzahl: #{stock.ws().quantity()}
+    li Total: #{stock.total()}
+    li Price: #{stock.exchange().price()}
+      small #{stock.exchange().time()}
+
 block content
-  .col-6
-    h1 Hello, World!
-    div.remark
-      p ISIN: #{stock.isin()} Anzahl: #{stock.quantity()}
+  div.row
+    div.col-3
+      +stockEntry(stock)

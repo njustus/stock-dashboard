@@ -8,6 +8,7 @@ import com.github.njustus.stockdashboard.config.{AppConfig, ConfigParser, Watche
 import java.nio.file.{Files, Paths}
 import scala.io.{BufferedSource, Source}
 import org.http4s.ember.client.EmberClientBuilder
+import org.http4s.server.Server
 
 import java.nio.charset.StandardCharsets
 
@@ -19,10 +20,11 @@ object Main extends IOApp {
     yield result
 
   def run(args: List[String]): IO[ExitCode] =
-    val builder = new TemplateBuilder
+
     EmberClientBuilder.default[IO].build.use { httpClient =>
       for
         config <- appConfig
+        builder = new TemplateBuilder(config)
         stockClient = new StockClient[IO](httpClient)(config)
         processor = new ConfigProcessor(stockClient)(config)
         routes = new StockRoutes(builder, processor)
