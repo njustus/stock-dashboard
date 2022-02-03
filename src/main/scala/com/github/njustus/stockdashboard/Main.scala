@@ -13,11 +13,9 @@ import java.nio.charset.StandardCharsets
 
 object Main extends IOApp {
 
-
   def appConfig: IO[AppConfig] =
     for
-      configPath <- IO.delay(Paths.get(getClass.getResource("/config.yaml").toURI))
-      result <- IO.fromEither(ConfigParser.readAppConfig(configPath))
+      result <- IO.fromEither(ConfigParser.readAppConfig("config.yaml"))
     yield result
 
   def run(args: List[String]): IO[ExitCode] =

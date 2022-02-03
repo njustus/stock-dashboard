@@ -9,14 +9,12 @@ import java.nio.file.Path
 
 class ConfigParserTest extends BaseTestSuite:
   import ConfigParser.*
-  val filePath: Path = resourcePath("/watched-stocks.yaml")
-  val appConfigPath: Path = resourcePath("/example-config.yaml")
 
   implicit val stockEncoder: Encoder.AsObject[WatchedStock] = deriveEncoder[WatchedStock]
   implicit val encoder: Encoder.AsObject[WatchedStocks] = deriveEncoder[WatchedStocks]
 
   "The ConfigParser" should "parse yaml files" in {
-    val json: Json = ConfigParser.readYaml(filePath).get
+    val json: Json = ConfigParser.readYaml(resourceReader("watched-stocks.yaml")).get
     json shouldNot be(null)
   }
 
@@ -32,7 +30,7 @@ class ConfigParserTest extends BaseTestSuite:
   }
 
   it should "parse WatchedStocks" in {
-    val stocks = ConfigParser.readUserConfig(filePath).get
+    val stocks = ConfigParser.readUserConfig(resourcePath("/watched-stocks.yaml")).get
     val expected = WatchedStocks(List(
       WatchedStock("123456", 5, None),
       WatchedStock("FR00542", 155, Some("MSCI World"))
@@ -42,7 +40,7 @@ class ConfigParserTest extends BaseTestSuite:
   }
 
   it should "parse AppConfig's" in {
-    val appConfig = ConfigParser.readAppConfig(appConfigPath).get
+    val appConfig = ConfigParser.readAppConfig("example-config.yaml").get
 
     appConfig shouldBe (AppConfig(
       "http://google.de",

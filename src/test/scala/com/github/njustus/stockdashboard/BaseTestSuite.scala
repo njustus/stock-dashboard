@@ -5,8 +5,11 @@ import org.scalatest.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import com.typesafe.scalalogging.LazyLogging
-import scala.io.Codec
+
+import scala.io.{Codec, Source}
 import io.circe.Decoder
+
+import java.io.{InputStreamReader, Reader}
 
 trait BaseTestSuite
   extends AnyFlatSpec
@@ -21,8 +24,11 @@ trait BaseTestSuite
       case Right(v) => v
 
   def resourceToString(resource:String): String =
-    scala.io.Source.fromResource(resource).mkString    
+    Source.fromResource(resource).mkString    
 
+  def resourceReader(resource:String): Reader =
+    Source.fromResource(resource).reader()
+  
   def resourcePath(resource:String):Path =
     logger.info(s"searching for resource $resource")
     Paths.get(getClass.getResource(resource).toURI)

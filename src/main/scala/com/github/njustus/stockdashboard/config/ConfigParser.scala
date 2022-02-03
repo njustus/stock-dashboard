@@ -1,9 +1,10 @@
 package com.github.njustus.stockdashboard.config
 
+import java.io.{InputStreamReader, Reader}
 import java.nio.file.{Path, Paths}
 import scala.io.Source
 import io.circe.*
-import io.circe.generic.semiauto._
+import io.circe.generic.semiauto.*
 import io.circe.yaml.parser
 import com.typesafe.scalalogging.LazyLogging
 
@@ -14,18 +15,17 @@ trait ConfigDecoders:
 
 object ConfigParser extends ConfigDecoders with LazyLogging:
   val DEFAULT_USER_PATH: Path = Paths.get(System.getProperty("user.home")).resolve(".stock-dashboard.yaml")
-  
-  def readYaml(path: Path): Decoder.Result[Json] =
-    parser.parse(Source.fromFile(path.toFile).reader()) match
+
+  def readYaml(reader: Reader) = parser.parse(reader) match
       case Right(js) => Right(js)
       case Left(failure) => Left(DecodingFailure.fromThrowable(failure, List.empty))
 
   def readUserConfig(path: Path): Decoder.Result[WatchedStocks] =
-    readYaml(path).flatMap(json => json.as[WatchedStocks])
+    readYaml(Source.fromFile(path.toFile).reader()).flatMap(json => json.as[WatchedStocks])
 
-  def readAppConfig(path: Path): Decoder.Result[AppConfig] =
-    readYaml(path).flatMap(json => json.as[AppConfig])
-  
+  def readAppConfig(resourceName: String): Decoder.Result[AppConfig] =
+    readYaml(Source.fromResource(resourceName).reader()).flatMap(json => json.as[AppConfig])
+
   def readUserConfigFromDefaultPath: Decoder.Result[WatchedStocks] =
     logger.info("reading user-config from {}", DEFAULT_USER_PATH)
     readUserConfig(DEFAULT_USER_PATH)
