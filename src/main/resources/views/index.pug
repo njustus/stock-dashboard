@@ -9,18 +9,18 @@ mixin stockEntry(stock)
       .col-4
         ul(class='list-unstyled')
           li Quantity: #{stock.ws().quantity()}
-          li Price: #{format.formatCurrency(stock.exchange().price())}
+          li Price: #{fmt.currency(stock.exchange().price())}
           li TER: #{stock.info().getTer()}
       .col-4
         ul(class='list-unstyled')
           li WKN: #{stock.info().wkn()}
           li ISIN: #{stock.isin()}
           li
-            small Time: #{format.formatDate(stock.exchange().time())}
+            small Time: #{fmt.date(stock.exchange().time())}
     .card-footer
       strong TOTAL
       .float-right
-        strong #{format.formatCurrency(stock.total())}
+        strong #{fmt.currency(stock.total())}
 
 block content
   .card.bg-light.shadow-sm.m-3
@@ -28,6 +28,6 @@ block content
       h2.col-3
         | Total Portfolio
       h2.col-3
-        bold.text-success #{format.formatCurrency(totalPortfolio)}
+        bold.text-success #{fmt.currency(totalPortfolio)}
   each stock in stocks
     +stockEntry(stock)

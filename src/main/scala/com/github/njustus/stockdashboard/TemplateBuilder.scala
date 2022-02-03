@@ -17,12 +17,12 @@ class Converter extends LazyLogging {
   private val currencyFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY)
   private val dateFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
-  def formatCurrency(n:Number): String =
+  def currency(n:Number): String =
     val s = currencyFormat.format(n)
     logger.debug(s"formatting $n as currency returning $s")
     s
 
-  def formatDate(date: TemporalAccessor): String =
+  def date(date: TemporalAccessor): String =
     val s = dateFormat.format(date)
     logger.debug(s"formatting $date as date, returning $s")
     s
@@ -61,7 +61,7 @@ class TemplateBuilder(appConfig:AppConfig) {
   config.setPrettyPrint(true)
   config.setMode(Pug4J.Mode.XHTML)
   config.setSharedVariables(Map(
-    "format" -> new Converter()
+    "fmt" -> new Converter()
   ).asJava)
 
   def render(templateName: String, args: Map[String, AnyRef]): String =
