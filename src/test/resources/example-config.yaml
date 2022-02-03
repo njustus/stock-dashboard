@@ -1,3 +1,4 @@
 baseUrl: "http://google.de"
 stockInfoPath: "/stockInfo?field=Basic"
 exchangeDataPath: "/exchangeData?field=ExchangesV2"
+environment: Staging

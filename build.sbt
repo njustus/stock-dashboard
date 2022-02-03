@@ -4,6 +4,8 @@ val LogbackVersion = "1.2.10"
 
 lazy val root = (project in file("."))
   .settings(
+    fork := true,
+    connectInput := true,
     organization := "com.github.njustus",
     name := "stock-dashboard",
     version := "0.0.1-SNAPSHOT",

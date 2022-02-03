@@ -45,6 +45,7 @@ class ConfigParserTest extends BaseTestSuite:
     appConfig shouldBe (AppConfig(
       "http://google.de",
       "/stockInfo?field=Basic",
-      "/exchangeData?field=ExchangesV2"
+      "/exchangeData?field=ExchangesV2",
+      Some("Staging")
     ))
   }
