@@ -6,7 +6,27 @@ import de.neuland.pug4j.{Pug4J, PugConfiguration}
 import de.neuland.pug4j.template.{FileTemplateLoader, TemplateLoader}
 
 import java.nio.file.Paths
+import java.text.NumberFormat
+import java.time.OffsetDateTime
+import java.time.format.{DateTimeFormatter, FormatStyle}
+import java.time.temporal.TemporalAccessor
+import java.util.Locale
 import scala.jdk.CollectionConverters.*
+
+class Converter extends LazyLogging {
+  private val currencyFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY)
+  private val dateFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+
+  def formatCurrency(n:Number): String =
+    val s = currencyFormat.format(n)
+    logger.debug(s"formatting $n as currency returning $s")
+    s
+
+  def formatDate(date: TemporalAccessor): String =
+    val s = dateFormat.format(date)
+    logger.debug(s"formatting $date as date, returning $s")
+    s
+}
 
 private class ResourceTemplateLoader(resourceBasePath: String) extends TemplateLoader with LazyLogging {
   import java.io.{InputStreamReader, Reader}
@@ -40,6 +60,9 @@ class TemplateBuilder(appConfig:AppConfig) {
   config.setTemplateLoader(loader)
   config.setPrettyPrint(true)
   config.setMode(Pug4J.Mode.XHTML)
+  config.setSharedVariables(Map(
+    "format" -> new Converter()
+  ).asJava)
 
   def render(templateName: String, args: Map[String, AnyRef]): String =
     val template = config.getTemplate(templateName+"."+loader.getExtension)

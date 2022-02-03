@@ -14,6 +14,7 @@ import io.circe.parser
 
 import java.io.File
 import scala.io.Source
+import scala.jdk.CollectionConverters.*
 
 class StockRoutes(templateBuilder: TemplateBuilder,
                   configProcessor: ConfigProcessor) extends Http4sDsl[IO] with LazyLogging:
@@ -30,9 +31,9 @@ class StockRoutes(templateBuilder: TemplateBuilder,
   def routes = HttpRoutes.of[IO] {
     case GET -> Root =>
       for
-        stocks <- stockDataSample
-        stock = stocks.head
-        html <- IO.delay(templateBuilder.render("index", Map("stock" -> stock))).onError(er => IO(er.printStackTrace()))
+        stocks <- stockDataSample.map(_.sortBy(_.total*(-1)))
+        total = stocks.map(_.total).sum
+        html <- IO.delay(templateBuilder.render("index", Map("totalPortfolio" -> total, "stocks" -> stocks.asJava))).onError(er => IO(er.printStackTrace()))
         resp <- Ok(html, headers.`Content-Type`(MediaType.unsafeParse("text/html")))
       yield resp
   }

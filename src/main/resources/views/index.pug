@@ -1,25 +1,33 @@
 extends layout.pug
 
 mixin stockEntry(stock)
-  .row.card.bg-light
-    .card-header
+  .row.card.bg-light.shadow-sm.m-3
+    h6.card-header
       | #{stock.info().name()}
       small.float-right #{stock.info().wkn()}
-    .row.card-body
-      .col-6
+    .row.card-body.justify-content-between
+      .col-4
         ul(class='list-unstyled')
           li Quantity: #{stock.ws().quantity()}
-          li Price: #{stock.exchange().price()}
+          li Price: #{format.formatCurrency(stock.exchange().price())}
           li TER: #{stock.info().getTer()}
-      .col-6
+      .col-4
         ul(class='list-unstyled')
           li WKN: #{stock.info().wkn()}
           li ISIN: #{stock.isin()}
           li
-            small Time: #{stock.exchange().time()}
+            small Time: #{format.formatDate(stock.exchange().time())}
     .card-footer
+      strong TOTAL
       .float-right
-        strong #{stock.total()}
+        strong #{format.formatCurrency(stock.total())}
 
 block content
-  +stockEntry(stock)
+  .card.bg-light.shadow-sm.m-3
+    .card-body.row.justify-content-between
+      h2.col-3
+        | Total Portfolio
+      h2.col-3
+        bold.text-success #{format.formatCurrency(totalPortfolio)}
+  each stock in stocks
+    +stockEntry(stock)
