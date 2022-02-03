@@ -1,8 +1,11 @@
 package com.github.njustus.stockdashboard.dtos
 
-case class StockInfo(name: String,
+case class StockInfo(val name: String,
                      isin: String,
-                     wkn:String,
+                     val wkn:String,
                      ter: Option[BigDecimal],
-                     investmentFocus: Option[String],
-                     investmentType: Option[String])
+                     val investmentFocus: Option[String],
+                     val investmentType: Option[String]) {
+
+  def getTer:String = ter.map(_.toString).getOrElse("n.a.")
+}
